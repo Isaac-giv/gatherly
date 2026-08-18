@@ -10,6 +10,7 @@ import { TicketVaultPage } from './pages/TicketVaultPage';
 import { OrganizerDashboardPage } from './pages/OrganizerDashboardPage';
 import { ScannerAppPage } from './pages/ScannerAppPage';
 import { CreateEventModal } from './components/CreateEventModal';
+import { LandingPage } from './pages/LandingPage';
 
 // Role-based tab access rules
 const ROLE_TABS = {
@@ -22,6 +23,7 @@ function AppContent() {
   const [activeTab, setActiveTab] = useState('feed');
   const [selectedEventId, setSelectedEventId] = useState(null);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [showAuthModal, setShowAuthModal] = useState(null); // 'login' | 'register' | null
 
   // If role changes and current tab is no longer accessible, redirect to feed
   useEffect(() => {
@@ -64,11 +66,20 @@ function AppContent() {
     );
   }
 
-  // Show auth modal if not logged in
+  // Show landing page if not logged in
   if (!user) {
     return (
       <div className="min-h-screen bg-[#0b0f19]">
-        <AuthModal />
+        <LandingPage 
+          onLogin={() => setShowAuthModal('login')} 
+          onSignup={() => setShowAuthModal('register')} 
+        />
+        {showAuthModal && (
+          <AuthModal 
+            initialTab={showAuthModal} 
+            onClose={() => setShowAuthModal(null)} 
+          />
+        )}
       </div>
     );
   }

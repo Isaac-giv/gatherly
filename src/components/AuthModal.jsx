@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { Sparkles, Eye, EyeOff, Zap, User, Mail, Lock, ArrowRight, Loader } from 'lucide-react';
+import { Sparkles, Eye, EyeOff, Zap, User, Mail, Lock, ArrowRight, Loader, X } from 'lucide-react';
 import logo from '/logo.jpg';
 
 const DEMO_ACCOUNTS = [
@@ -26,9 +26,9 @@ const DEMO_ACCOUNTS = [
   }
 ];
 
-export const AuthModal = () => {
+export const AuthModal = ({ onClose, initialTab = 'login' }) => {
   const { login, register } = useAuth();
-  const [tab, setTab] = useState('login'); // 'login' | 'register'
+  const [tab, setTab] = useState(initialTab); // 'login' | 'register'
   const [form, setForm] = useState({ name: '', email: '', password: '', role: 'ATTENDEE' });
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
@@ -71,8 +71,19 @@ export const AuthModal = () => {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#070a12]/95 backdrop-blur-sm px-4">
-      <div className="w-full max-w-md">
+    <div 
+      className="fixed inset-0 z-50 flex items-center justify-center bg-[#070a12]/95 backdrop-blur-sm px-4"
+      onClick={(e) => { if (e.target === e.currentTarget && onClose) onClose(); }}
+    >
+      <div className="w-full max-w-md relative">
+        {onClose && (
+          <button 
+            onClick={onClose} 
+            className="absolute top-0 right-0 p-2 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800 transition-all"
+          >
+            <X className="w-5 h-5" />
+          </button>
+        )}
         {/* Header */}
         <div className="text-center mb-8">
           <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl overflow-hidden shadow-xl shadow-indigo-500/30 border border-indigo-400/30 mb-4">
