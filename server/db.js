@@ -417,6 +417,7 @@ export async function connectDB() {
     try {
       await mongoose.connect(uri);
       console.log('⚡ Connected to MongoDB Database');
+      await seedMongoDemoAccounts();
     } catch (error) {
       console.warn('⚠️ MongoDB connection failed. Utilizing Gatherly In-Memory Store.', error.message);
     }
@@ -424,3 +425,52 @@ export async function connectDB() {
     console.log('⚡ Operating with Gatherly Instant In-Memory Seeded Store');
   }
 }
+
+/**
+ * Seeds hardcoded demo accounts into MongoDB on first run.
+ * Uses bcrypt for proper password hashing.
+ * Idempotent — safe to call on every server start.
+ */
+async function seedMongoDemoAccounts() {
+  try {
+    // Lazy import to avoid circular deps
+    const { User } = await import('./models/Schemas.js');
+    const bcrypt = await import('bcryptjs');
+
+    const demoUsers = [
+      {
+        name: 'Alex Vance',
+        email: 'organizer@gatherly.io',
+        password: 'password123',
+        role: 'ORGANIZER',
+        avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=250&q=80'
+      },
+      {
+        name: 'Sarah Connor',
+        email: 'sarah@attendee.com',
+        password: 'password123',
+        role: 'ATTENDEE',
+        avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=250&q=80'
+      },
+      {
+        name: 'Marcus Chen',
+        email: 'marcus@devs.io',
+        password: 'password123',
+        role: 'ATTENDEE',
+        avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=250&q=80'
+      }
+    ];
+
+    for (const demo of demoUsers) {
+      const exists = await User.findOne({ email: demo.email });
+      if (!exists) {
+        const hashed = await bcrypt.default.hash(demo.password, 12);
+        await User.create({ ...demo, password: hashed });
+        console.log(`✅ Seeded demo account: ${demo.email} (${demo.role})`);
+      }
+    }
+  } catch (err) {
+    console.warn('⚠️ Could not seed demo accounts:', err.message);
+  }
+}
+

@@ -1,5 +1,6 @@
 import express from 'express';
 import { memoryStore } from '../db.js';
+import { requireAuth, requireRole } from '../middleware/auth.js';
 
 const router = express.Router();
 
@@ -31,8 +32,8 @@ router.get('/:id', (req, res) => {
   }
 });
 
-// Create new event (Organizer Wizard)
-router.post('/', (req, res) => {
+// Create new event — Organizer only
+router.post('/', requireAuth, requireRole('ORGANIZER'), (req, res) => {
   try {
     const {
       title,
