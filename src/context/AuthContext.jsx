@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { apiUrl } from '../config/api';
 
 const AuthContext = createContext();
 
@@ -31,7 +32,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   const login = async (email, password) => {
-    const res = await fetch('/api/auth/login', {
+    const res = await fetch(apiUrl('/api/auth/login'), {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, password })
@@ -43,7 +44,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   const register = async (name, email, password, role = 'ATTENDEE') => {
-    const res = await fetch('/api/auth/register', {
+    const res = await fetch(apiUrl('/api/auth/register'), {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ name, email, password, role })
@@ -64,7 +65,7 @@ export const AuthProvider = ({ children }) => {
   // Quick persona switcher for demo (keeps existing demo UX)
   const switchPersona = async (role) => {
     try {
-      const res = await fetch('/api/auth/switch-persona', {
+      const res = await fetch(apiUrl('/api/auth/switch-persona'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ role })

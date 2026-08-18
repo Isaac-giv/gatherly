@@ -24,10 +24,14 @@ dotenv.config({ path: path.join(__dirname, '..', '.env') });
 const app = express();
 const server = http.createServer(app);
 
+const allowedOrigins = process.env.ALLOWED_ORIGINS
+  ? process.env.ALLOWED_ORIGINS.split(',')
+  : ['*'];
+
 // Enable Socket.io with CORS
 const io = new Server(server, {
   cors: {
-    origin: '*',
+    origin: allowedOrigins.includes('*') ? '*' : allowedOrigins,
     methods: ['GET', 'POST', 'PUT', 'DELETE']
   }
 });
@@ -36,7 +40,10 @@ const io = new Server(server, {
 app.set('socketio', io);
 
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: allowedOrigins.includes('*') ? '*' : allowedOrigins,
+  credentials: true
+}));
 app.use(express.json());
 
 // Track live room viewers for FOMO count

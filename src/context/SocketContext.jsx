@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { io } from 'socket.io-client';
+import { API_BASE_URL } from '../config/api';
 
 const SocketContext = createContext();
 
@@ -9,7 +10,8 @@ export const SocketProvider = ({ children }) => {
   const [recentSalesNotification, setRecentSalesNotification] = useState(null);
 
   useEffect(() => {
-    const newSocket = io(window.location.origin, {
+    const socketUrl = API_BASE_URL || window.location.origin;
+    const newSocket = io(socketUrl, {
       transports: ['websocket', 'polling'],
       reconnectionAttempts: 5,
     });
