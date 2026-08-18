@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { Calendar, Sparkles, Eye, EyeOff, Zap, User, Mail, Lock, ArrowRight, Loader } from 'lucide-react';
+import { Sparkles, Eye, EyeOff, Zap, User, Mail, Lock, ArrowRight, Loader } from 'lucide-react';
+import logo from '/logo.jpg';
 
 const DEMO_ACCOUNTS = [
   {
@@ -74,8 +75,8 @@ export const AuthModal = () => {
       <div className="w-full max-w-md">
         {/* Header */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-tr from-indigo-600 via-indigo-500 to-purple-500 shadow-xl shadow-indigo-500/30 border border-indigo-400/30 mb-4">
-            <Calendar className="w-7 h-7 text-white" />
+          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl overflow-hidden shadow-xl shadow-indigo-500/30 border border-indigo-400/30 mb-4">
+            <img src={logo} alt="Gatherly" className="w-full h-full object-cover" />
           </div>
           <h1 className="text-2xl font-extrabold text-white tracking-tight">
             Welcome to <span className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 to-purple-400">Gatherly</span>

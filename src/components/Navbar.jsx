@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useSocket } from '../context/SocketContext';
 import { Calendar, Ticket, LayoutDashboard, QrCode, Sparkles, LogOut, ChevronDown, User } from 'lucide-react';
+import logo from '/logo.jpg';
 
 export const Navbar = ({ activeTab, setActiveTab }) => {
   const { user, logout } = useAuth();
@@ -43,8 +44,8 @@ export const Navbar = ({ activeTab, setActiveTab }) => {
 
           {/* Logo & Brand */}
           <div className="flex items-center gap-3 cursor-pointer" onClick={() => setActiveTab('feed')}>
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 via-indigo-500 to-purple-500 flex items-center justify-center shadow-lg shadow-indigo-500/30 border border-indigo-400/30">
-              <Calendar className="w-5 h-5 text-white" />
+            <div className="w-10 h-10 rounded-xl overflow-hidden shadow-lg shadow-indigo-500/30 border border-indigo-400/30">
+              <img src={logo} alt="Gatherly" className="w-full h-full object-cover" />
             </div>
             <div>
               <span className="font-display font-extrabold text-xl tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white via-slate-200 to-indigo-300">
